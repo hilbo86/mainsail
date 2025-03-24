@@ -186,7 +186,7 @@ export const getters: GetterTree<PrinterState, RootState> = {
 
     getFans: (state, getters) => {
         const fans: PrinterStateFan[] = []
-        const supportedFans = ['temperature_fan', 'controller_fan', 'heater_fan', 'fan_generic', 'fan']
+        const supportedFans = ['temperature_fan', 'extended_temperature_fan', 'controller_fan', 'heater_fan', 'linux_fan', 'fan_generic', 'fan']
         const objects = getters.getPrinterObjects(supportedFans)
 
         const controllableFans = ['fan_generic', 'fan']
@@ -310,6 +310,7 @@ export const getters: GetterTree<PrinterState, RootState> = {
             'output_pin',
             'pwm_tool',
             'pwm_cycle_time',
+            'linux_fan',
         ]
 
         const controllableFans = ['fan_generic', 'fan']
@@ -480,7 +481,7 @@ export const getters: GetterTree<PrinterState, RootState> = {
 
     getHostTempSensor: (state, getters) => {
         const sensorTypes = ['rpi_temperature', 'temperature_host']
-        const checkObjects = ['temperature_sensor', 'temperature_fan']
+        const checkObjects = ['temperature_sensor', 'temperature_fan', 'extended_temperature_fan']
         let output: null | { temperature: number; measured_min_temp: number; measured_max_temp: number } = null
 
         const objects = getters.getPrinterConfigObjects(checkObjects)
@@ -503,7 +504,7 @@ export const getters: GetterTree<PrinterState, RootState> = {
     },
 
     getMcuTempSensors: (state, getters) => {
-        const checkObjects = ['temperature_sensor', 'temperature_fan']
+        const checkObjects = ['temperature_sensor', 'temperature_fan', 'extended_temperature_fan']
         // eslint-disable-next-line
         const output: { key: string; settings: any; object: any }[] = []
 
