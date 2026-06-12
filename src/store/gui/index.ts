@@ -1,4 +1,5 @@
 import { GuiState } from '@/store/gui/types'
+import { RootState } from '@/store/types'
 import { Module } from 'vuex'
 import { actions } from '@/store/gui/actions'
 import { mutations } from '@/store/gui/mutations'
@@ -196,6 +197,7 @@ export const getDefaultState = (): GuiState => {
                 showFilamentName: false,
                 showLaneInfinite: true,
                 showUnitIcons: true,
+                showTd1Color: true,
             },
             blockFileUpload: false,
             configfiles: {
@@ -274,6 +276,15 @@ export const getDefaultState = (): GuiState => {
                 countPerPage: 10,
             },
             lockedSliders: [],
+            mmu: {
+                showClogDetection: true,
+                showTtgMap: true,
+                showDetails: true,
+                largeFilamentStatus: false,
+                showLogos: true,
+                showName: true,
+                showUnavailableSpoolColor: false,
+            },
             tempchart: {
                 boolTempchart: true,
                 hiddenDataset: [],
@@ -310,7 +321,7 @@ export const getDefaultState = (): GuiState => {
 // initial state
 const state = getDefaultState()
 
-export const gui: Module<GuiState, any> = {
+export const gui: Module<GuiState, RootState> = {
     namespaced: true,
     state,
     getters,
