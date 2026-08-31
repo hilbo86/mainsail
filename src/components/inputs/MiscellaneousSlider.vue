@@ -18,6 +18,8 @@
                     <span>{{ convertName(name) }}</span>
                     <v-spacer />
                     <small v-if="rpm !== null" :class="rpmClasses">{{ Math.round(rpm ?? 0) }} RPM</small>
+                    <small v-if="rpm !== null && current !== null" class="mx-1">·</small>
+                    <small v-if="current !== null" :class="currentClasses">{{ formattedCurrent }}</small>
                     <span v-if="!controllable" class="font-weight-bold">
                         {{ Math.round(parseFloat(value) * 100) }} %
                     </span>
@@ -141,8 +143,14 @@ export default class MiscellaneousSlider extends Mixins(BaseMixin) {
     @Prop({ type: Boolean, default: false })
     declare pwm: boolean
 
-    @Prop({ type: [Number, Boolean], default: false })
-    declare rpm: number | boolean
+    @Prop({ type: Number, default: null })
+    declare rpm: number | null
+
+    @Prop({ type: Number, default: null })
+    declare current: number | null
+
+    @Prop({ type: String, default: null })
+    declare currentUnit: string | null
 
     @Prop({ type: Number, default: 1 })
     declare multi: number
@@ -155,6 +163,15 @@ export default class MiscellaneousSlider extends Mixins(BaseMixin) {
 
     get value(): number {
         return Math.round((this.target / this.max) * 100) / 100
+    }
+
+    get formattedCurrent(): string {
+        if (this.current === null || !Number.isFinite(this.current)) return '--'
+
+        const rounded =
+            (Math.sign(this.current) * Math.round((Math.abs(this.current) + Number.EPSILON) * 100)) / 100
+        const unit = this.currentUnit === null ? '' : ` ${this.currentUnit}`
+        return `${rounded.toFixed(2)}${unit}`
     }
 
     @Watch('lockSliders', { immediate: true })
@@ -296,6 +313,12 @@ export default class MiscellaneousSlider extends Mixins(BaseMixin) {
         if (this.rpm === 0 && this.value > 0) output.push('red--text')
 
         return output
+    }
+
+    get currentClasses() {
+        if (!this.controllable) return ['mr-3', 'mt-1']
+
+        return ['mt-2']
     }
 
     get ledChannelName() {

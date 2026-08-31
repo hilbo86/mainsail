@@ -25,15 +25,19 @@ export default class MiscellaneousSensor extends Mixins(BaseMixin) {
     unitToSymbol = unitToSymbol
 
     @Prop({ type: String, required: true }) declare readonly name: string
-    @Prop({ type: Number, required: true }) declare readonly value: number
-    @Prop({ type: String, required: false }) declare readonly unit: string
+    @Prop({ type: String, required: true }) declare readonly type: string
+    @Prop({ type: Number, default: null }) declare readonly value: number | null
+    @Prop({ type: String, default: '' }) declare readonly unit: string
 
-    get output() {
-        const value = isNaN(this.value) ? '--' : this.value
+    get output(): string {
+        if (this.value === null || !Number.isFinite(this.value)) return '--'
 
-        if (this.unit === null) return this.value
+        let value = this.value
+        if (this.type === 'analog_input') {
+            value = Math.sign(value) * Math.round((Math.abs(value) + Number.EPSILON) * 100) / 100
+        }
 
-        return `${value} ${this.unit}`
+        return this.unit ? `${value} ${this.unit}` : `${value}`
     }
 }
 </script>

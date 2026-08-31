@@ -115,7 +115,9 @@ export interface PrinterStateMiscellaneous {
     power: number
     controllable: boolean
     pwm: boolean
-    rpm: number
+    rpm: number | null
+    current: number | null
+    currentUnit: string | null
     scale: number
     // eslint-disable-next-line
     object: any
@@ -128,7 +130,7 @@ export interface PrinterStateMiscellaneous {
 export interface PrinterStateMiscellaneousSensor {
     type: string
     name: string
-    value: number
+    value: number | null
     unit: string
 }
 

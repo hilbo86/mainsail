@@ -223,6 +223,7 @@ export const getters: GetterTree<PrinterState, RootState> = {
             'fan_generic',
             'fan',
             'output_pin',
+            'power_output',
             'pwm_tool',
             'pwm_cycle_time',
             'linux_fan',
@@ -240,12 +241,14 @@ export const getters: GetterTree<PrinterState, RootState> = {
                     const settings = state.configfile?.settings[key.toLowerCase()] ?? {}
                     const power = 'speed' in value ? value.speed : 'value' in value ? value.value : 0
                     const rpm = 'rpm' in value ? value.rpm : null
+                    const current = typeof value.current === 'number' ? value.current : null
+                    const currentUnit = typeof value.current_unit === 'string' ? value.current_unit : null
                     let pwm = controllable
                     let scale = 1
 
                     if (nameSplit[0].toLowerCase() === 'fan') scale = 255
 
-                    if (['output_pin', 'pwm_tool', 'pwm_cycle_time'].includes(nameSplit[0])) {
+                    if (['output_pin', 'power_output', 'pwm_tool', 'pwm_cycle_time'].includes(nameSplit[0])) {
                         controllable = true
                         pwm = false
                         if ('pwm' in settings) pwm = settings?.pwm ?? false
@@ -260,6 +263,8 @@ export const getters: GetterTree<PrinterState, RootState> = {
                         controllable,
                         pwm,
                         rpm,
+                        current,
+                        currentUnit,
                         scale,
                         object: value,
                         config: settings,
@@ -303,7 +308,7 @@ export const getters: GetterTree<PrinterState, RootState> = {
 
     getMiscellaneousSensors: (state) => {
         const output: PrinterStateMiscellaneousSensor[] = []
-        const supportedObjects = ['load_cell']
+        const supportedObjects = ['load_cell', 'analog_input']
 
         for (const [key, value] of Object.entries(state)) {
             const nameSplit = key.split(' ')
@@ -315,8 +320,8 @@ export const getters: GetterTree<PrinterState, RootState> = {
             const basis = {
                 name: name,
                 type: nameSplit[0],
-                value: 'value' in value ? value.value : null,
-                unit: 'unit' in value ? value.unit : '',
+                value: typeof value.value === 'number' ? value.value : null,
+                unit: typeof value.unit === 'string' ? value.unit : '',
             }
             if (nameSplit[0] == 'load_cell') {
                 output.push({

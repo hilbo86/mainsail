@@ -14,6 +14,8 @@
                 :type="object.type"
                 :target="object.power"
                 :rpm="object.rpm"
+                :current="object.current"
+                :current-unit="object.currentUnit"
                 :controllable="object.controllable"
                 :pwm="object.pwm"
                 :off_below="object.off_below"
@@ -35,7 +37,11 @@
         </div>
         <div v-for="(sensor, index) of miscellaneousSensors" :key="'miscellaneous_sensor_' + index">
             <v-divider v-if="index || miscellaneous.length || lights.length || filamentSensors.length" />
-            <miscellaneous-sensor :name="sensor.name" :value="sensor.value" :unit="sensor.unit" />
+            <miscellaneous-sensor
+                :name="sensor.name"
+                :type="sensor.type"
+                :value="sensor.value"
+                :unit="sensor.unit" />
         </div>
         <div v-for="(sensor, index) of moonrakerSensors" :key="'moonraker_sensor_' + index">
             <v-divider
@@ -93,7 +99,12 @@ export default class MiscellaneousPanel extends Mixins(BaseMixin, MiscellaneousM
 
     get showMiscellaneousPanel() {
         return (
-            this.klipperReadyForGui && (this.miscellaneous.length || this.filamentSensors.length || this.lights.length)
+            this.klipperReadyForGui &&
+            (this.miscellaneous.length ||
+                this.filamentSensors.length ||
+                this.lights.length ||
+                this.miscellaneousSensors.length ||
+                this.moonrakerSensors.length)
         )
     }
 }
