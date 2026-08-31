@@ -1,5 +1,5 @@
 <template>
-    <v-form ref="webcamForm" v-model="valid" @submit.prevent="submit">
+    <v-form ref="webcamForm" v-model="valid" v-observe-visibility="visibilityChanged" @submit.prevent="submit">
         <v-card-title>{{ title }}</v-card-title>
         <v-card-text>
             <v-row>
@@ -83,8 +83,17 @@
                                 :label="$t('Settings.WebcamsTab.Service')" />
                         </v-col>
                     </v-row>
-                    <v-row v-if="['mjpegstreamer-adaptive', 'jmuxer-stream'].includes(webcam.service)">
-                        <v-col class="py-2 col-6">
+                    <v-row v-if="hasTargetFps || hasRotate">
+                        <v-col v-if="hasAspectRatio" class="py-2">
+                            <v-text-field
+                                v-model="webcam.aspect_ratio"
+                                :label="$t('Settings.WebcamsTab.AspectRatio')"
+                                hide-details="auto"
+                                outlined
+                                dense
+                                :rules="[rules.required, rules.aspect]" />
+                        </v-col>
+                        <v-col v-if="hasTargetFps" class="py-2 col-6">
                             <v-text-field
                                 v-model="webcam.target_fps"
                                 outlined
@@ -92,7 +101,7 @@
                                 hide-details
                                 :label="$t('Settings.WebcamsTab.TargetFPS')" />
                         </v-col>
-                        <v-col class="py-2 col-6">
+                        <v-col v-if="hasRotate" class="py-2 col-6">
                             <v-select
                                 v-model="webcam.rotation"
                                 :items="rotationItems"
@@ -196,19 +205,19 @@
                     </template>
                 </v-col>
                 <v-col class="col-12 col-sm-6 text-center" align-self="center">
-                    <webcam-wrapper :webcam="webcam" page="settings" />
+                    <webcam-wrapper v-if="showPreviewWebcam" :webcam="previewWebcam" page="settings" />
                 </v-col>
             </v-row>
         </v-card-text>
         <v-card-actions class="d-flex justify-end">
-            <v-btn text @click="closeForm">{{ $t('Settings.Cancel') }}</v-btn>
+            <v-btn text @click="closeForm">{{ $t('Buttons.Cancel') }}</v-btn>
             <v-btn color="primary" text type="submit" :disabled="!valid">{{ actionButtonText }}</v-btn>
         </v-card-actions>
     </v-form>
 </template>
 
 <script lang="ts">
-import { Component, Mixins, Prop } from 'vue-property-decorator'
+import { Component, Mixins, Prop, Watch } from 'vue-property-decorator'
 import BaseMixin from '@/components/mixins/base'
 import SettingsRow from '@/components/settings/SettingsRow.vue'
 import { mdiDelete, mdiPencil, mdiMenuDown } from '@mdi/js'
@@ -228,13 +237,28 @@ export default class WebcamForm extends Mixins(BaseMixin, WebcamMixin) {
     @Prop({ type: Object, required: true }) private webcam!: GuiWebcamStateWebcam
     @Prop({ type: String, default: 'create' }) readonly type!: 'create' | 'edit'
 
-    private selectIcon = false
-    private valid = false
-    private oldWebcamName = ''
+    selectIcon = false
+    valid = false
+    oldWebcamName = ''
 
-    private rules = {
+    showPreviewWebcam = false
+    previewWebcam: GuiWebcamStateWebcam = {} as GuiWebcamStateWebcam
+    previewDebounce: ReturnType<typeof setTimeout> | null = null
+
+    rules = {
         required: (value: string) => value !== '' || this.$t('Settings.WebcamsTab.Required'),
         unique: (value: string) => !this.existsWebcamName(value) || this.$t('Settings.WebcamsTab.NameAlreadyExists'),
+        aspect: (value: string) => {
+            const match = value.toString().match(/^(\d+)\s*[:/]\s*(\d+)$/)
+            if (!match) return this.$t('Settings.WebcamsTab.InvalidAspectRatio')
+
+            const width = parseInt(match[1])
+            const height = parseInt(match[2])
+
+            if (width < 1 || height < 1) return this.$t('Settings.WebcamsTab.InvalidAspectRatio')
+
+            return true
+        },
     }
 
     get webcams() {
@@ -265,7 +289,7 @@ export default class WebcamForm extends Mixins(BaseMixin, WebcamMixin) {
     }
 
     get rulesStreamUrl() {
-        let rules = []
+        const rules = []
 
         if (this.webcam.service !== 'mjpegstreamer-adaptive') {
             rules.push(this.rules.required)
@@ -275,7 +299,7 @@ export default class WebcamForm extends Mixins(BaseMixin, WebcamMixin) {
     }
 
     get rulesSnapshotUrl() {
-        let rules = []
+        const rules = []
 
         if (this.webcam.service === 'mjpegstreamer-adaptive') {
             rules.push(this.rules.required)
@@ -290,6 +314,7 @@ export default class WebcamForm extends Mixins(BaseMixin, WebcamMixin) {
             { value: 'mjpegstreamer-adaptive', text: this.$t('Settings.WebcamsTab.MjpegstreamerAdaptive') },
             { value: 'uv4l-mjpeg', text: this.$t('Settings.WebcamsTab.Uv4lMjpeg') },
             { value: 'html-video', text: this.$t('Settings.WebcamsTab.HtmlVideo') },
+            { value: 'iframe', text: this.$t('Settings.WebcamsTab.HtmlIframe') },
             { value: 'webrtc-camerastreamer', text: this.$t('Settings.WebcamsTab.WebrtcCameraStreamer') },
             { value: 'webrtc-go2rtc', text: this.$t('Settings.WebcamsTab.WebrtcGo2rtc') },
             { value: 'webrtc-mediamtx', text: this.$t('Settings.WebcamsTab.WebrtcMediaMTX') },
@@ -313,15 +338,39 @@ export default class WebcamForm extends Mixins(BaseMixin, WebcamMixin) {
     }
 
     get classIconButtonArrow() {
-        let classes = ['_transition']
+        const classes = ['_transition']
 
         if (this.selectIcon) classes.push('_rotate-180')
 
         return classes
     }
 
+    get hasTargetFps() {
+        return ['mjpegstreamer-adaptive', 'jmuxer-stream'].includes(this.webcam.service)
+    }
+
+    get hasRotate() {
+        return [
+            'hlsstream',
+            'html-video',
+            'iframe',
+            'jmuxer-stream',
+            'mjpegstreamer',
+            'mjpegstreamer-adaptive',
+            'uv4l-mjpeg',
+            'webrtc-camerastreamer',
+            'webrtc-go2rtc',
+            'webrtc-janus',
+            'webrtc-mediamtx',
+        ].includes(this.webcam.service)
+    }
+
     get hasFpsCounter() {
         return ['mjpegstreamer', 'mjpegstreamer-adaptive'].includes(this.webcam.service)
+    }
+
+    get hasAspectRatio() {
+        return ['iframe'].includes(this.webcam.service)
     }
 
     get hasAudioOption() {
@@ -341,8 +390,7 @@ export default class WebcamForm extends Mixins(BaseMixin, WebcamMixin) {
             return
         }
 
-        // @ts-ignore
-        this.webcam.extra_data.hideFps = newVal
+        this.webcam.extra_data!.hideFps = newVal
     }
 
     get enableAudio() {
@@ -358,8 +406,7 @@ export default class WebcamForm extends Mixins(BaseMixin, WebcamMixin) {
             return
         }
 
-        // @ts-ignore
-        this.webcam.extra_data.enableAudio = newVal
+        this.webcam.extra_data!.enableAudio = newVal
     }
 
     get nozzleCrosshairAvialable() {
@@ -410,6 +457,24 @@ export default class WebcamForm extends Mixins(BaseMixin, WebcamMixin) {
 
     mounted() {
         this.oldWebcamName = this.webcam.name
+        this.previewWebcam = this.cloneWebcam(this.webcam)
+    }
+
+    beforeDestroy() {
+        if (this.previewDebounce) clearTimeout(this.previewDebounce)
+    }
+
+    cloneWebcam(webcam: GuiWebcamStateWebcam): GuiWebcamStateWebcam {
+        return JSON.parse(JSON.stringify(webcam))
+    }
+
+    @Watch('webcam', { deep: true })
+    onWebcamChanged() {
+        if (this.previewDebounce) clearTimeout(this.previewDebounce)
+
+        this.previewDebounce = setTimeout(() => {
+            this.previewWebcam = this.cloneWebcam(this.webcam)
+        }, 500)
     }
 
     existsWebcamName(name: string) {
@@ -423,6 +488,10 @@ export default class WebcamForm extends Mixins(BaseMixin, WebcamMixin) {
 
         // If we are editing a webcam, we want to check if the name only exists once (the one we are editing)
         return count >= 1
+    }
+
+    visibilityChanged(newVal: boolean) {
+        this.showPreviewWebcam = newVal
     }
 
     submit() {
