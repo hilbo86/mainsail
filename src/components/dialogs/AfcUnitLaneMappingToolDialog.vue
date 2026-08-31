@@ -1,5 +1,5 @@
 <template>
-    <v-dialog :value="show" width="400" @click:outside="closeDialog">
+    <v-dialog v-model="showDialog" width="400" @click:outside="closeDialog">
         <panel
             :title="$t('Panels.AfcPanel.LaneMapping')"
             :icon="afcIconLogo"
@@ -21,7 +21,7 @@
                         <v-btn
                             v-for="tool in afcMapList"
                             :key="tool"
-                            :disabled="tool.toLowerCase() === mappedTool.toLowerCase()"
+                            :disabled="mappedTools.includes(tool.toLowerCase())"
                             color="primary"
                             class="ma-2"
                             @click="mapTool(tool)">
@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Mixins, Prop } from 'vue-property-decorator'
+import { Component, Mixins, Prop, VModel } from 'vue-property-decorator'
 import BaseMixin from '@/components/mixins/base'
 import Panel from '@/components/ui/Panel.vue'
 import { mdiCloseThick } from '@mdi/js'
@@ -49,15 +49,18 @@ export default class AfcUnitLaneMappingToolDialog extends Mixins(BaseMixin, AfcM
     afcIconLogo = afcIconLogo
     mdiCloseThick = mdiCloseThick
 
-    @Prop({ type: Boolean, required: true }) readonly show!: boolean
+    @VModel({ type: Boolean }) showDialog!: boolean
     @Prop({ type: String, required: true }) readonly name!: string
 
     get lane() {
         return this.getAfcLaneObject(this.name)
     }
 
-    get mappedTool() {
-        return this.lane.map ?? '--'
+    get mappedTools(): string[] {
+        const map = this.lane.map
+        if (!map) return []
+
+        return Array.isArray(map) ? map.map((t: string) => t.toLowerCase()) : [map.toLowerCase()]
     }
 
     mapTool(newTool: string) {
@@ -72,7 +75,7 @@ export default class AfcUnitLaneMappingToolDialog extends Mixins(BaseMixin, AfcM
     }
 
     closeDialog() {
-        this.$emit('close')
+        this.showDialog = false
     }
 }
 </script>

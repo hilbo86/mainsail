@@ -2,9 +2,9 @@
     <v-row class="flex-grow-0">
         <v-col class="px-6 pt-6 pb-3 py-4">
             <v-btn dense small class="w-100 elevation-0" @click="showDialog = true">
-                {{ name }} > {{ mappedTool }}
+                {{ mappedTool }} > {{ name }}
             </v-btn>
-            <afc-unit-lane-mapping-tool-dialog :name="name" :show="showDialog" @close="showDialog = false" />
+            <afc-unit-lane-mapping-tool-dialog v-model="showDialog" :name="name" />
         </v-col>
     </v-row>
 </template>
@@ -24,7 +24,10 @@ export default class AfcPanelUnitLaneHeader extends Mixins(BaseMixin, AfcMixin) 
     }
 
     get mappedTool() {
-        return this.lane.map ?? '--'
+        const map = this.lane.map
+        if (!map || map.length === 0) return 'NONE'
+
+        return Array.isArray(map) ? map.join(', ') : map
     }
 }
 </script>

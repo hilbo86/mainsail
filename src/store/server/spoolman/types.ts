@@ -25,6 +25,8 @@ export interface ServerSpoolmanStateFilament {
     name: string
     comment?: string
     color_hex: string
+    multi_color_hexes?: string
+    multi_color_direction?: 'coaxial' | 'longitudinal'
     density: number
     diameter: number
     material: string
@@ -43,6 +45,7 @@ export interface ServerSpoolmanStateSpool {
     filament: ServerSpoolmanStateFilament
     first_used: string
     last_used: string
+    initial_weight?: number
     remaining_length: number
     remaining_weight: number
     used_length: number

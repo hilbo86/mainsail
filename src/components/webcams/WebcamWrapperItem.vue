@@ -12,6 +12,7 @@
             :show-fps="showFps"
             :printer-url="printerUrl" />
         <uv4l-mjpeg-async v-else-if="service === 'uv4l-mjpeg'" :cam-settings="webcam" :printer-url="printerUrl" />
+        <html-iframe-async v-else-if="service === 'iframe'" :cam-settings="webcam" :printer-url="printerUrl" />
         <html-video-async v-else-if="service === 'html-video'" :cam-settings="webcam" :printer-url="printerUrl" />
         <hlsstreamer-async v-else-if="service === 'hlsstream'" :cam-settings="webcam" :printer-url="printerUrl" />
         <j-muxer-stream-async
@@ -44,7 +45,8 @@ import { DynamicCamLoader } from '@/components/webcams/streamers/DynamicCamLoade
 @Component({
     components: {
         HlsstreamerAsync: DynamicCamLoader('Hlsstreamer'),
-        HtmlVideoAsyc: DynamicCamLoader('HtmlVideo'),
+        HtmlVideoAsync: DynamicCamLoader('HtmlVideo'),
+        HtmlIframeAsync: DynamicCamLoader('HtmlIframe'),
         JanusStreamerAsync: DynamicCamLoader('JanusStreamer'),
         JMuxerStreamAsync: DynamicCamLoader('JMuxerStream'),
         MjpegstreamerAsync: DynamicCamLoader('Mjpegstreamer'),
@@ -57,7 +59,7 @@ import { DynamicCamLoader } from '@/components/webcams/streamers/DynamicCamLoade
 })
 export default class WebcamWrapperItem extends Mixins(BaseMixin) {
     @Prop({ type: Object, required: true }) webcam!: GuiWebcamStateWebcam
-    @Prop({ type: Boolean, default: true }) showFps!: Boolean
+    @Prop({ type: Boolean, default: true }) showFps!: boolean
     @Prop({ default: null }) printerUrl!: string | null
     @Prop({ type: String, default: null }) page!: string | null
 
@@ -66,3 +68,25 @@ export default class WebcamWrapperItem extends Mixins(BaseMixin) {
     }
 }
 </script>
+
+<style scoped>
+::v-deep .webcamBackground {
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    background: rgba(0, 0, 0, 0.8);
+    margin: 0 auto;
+    max-height: calc(100vh - 155px);
+}
+
+::v-deep .webcamImage {
+    width: 100%;
+    transform-origin: center center;
+    object-fit: contain;
+}
+
+html.theme--light ::v-deep .webcamBackground {
+    background: rgba(255, 255, 255, 0.7);
+}
+</style>

@@ -90,7 +90,6 @@
             "UploadPrint": "Загрузить и напечатать"
         },
         "TopCornerMenu": {
-            "Cancel": "Отмена",
             "ConfirmationDialog": {
                 "Description": {
                     "HostReboot": "Перезагрузка хоста приведёт к сбою текущей печати!",
@@ -125,7 +124,6 @@
             "Stop": "Остановить"
         },
         "UpdateDialog": {
-            "Close": "Закрыть",
             "Empty": "Пусто",
             "Recovering": "Восстановление {software}...",
             "RecoveringDone": "Восстановление {software} выполнено!",
@@ -144,11 +142,18 @@
         "ScrewName": "Имя винта",
         "ScrewOutput": "{current} из {max}"
     },
+    "Buttons": {
+        "Cancel": "Отмена",
+        "Close": "Закрыть",
+        "Confirm": "Подтвердить",
+        "Delete": "Удалить",
+        "No": "Нет",
+        "Save": "Сохранить",
+        "Yes": "Да"
+    },
     "CancelJobDialog": {
         "AreYouSure": "Вы уверены, что хотите отменить задание?",
-        "CancelJob": "Отменить задание",
-        "No": "Нет",
-        "Yes": "Да"
+        "CancelJob": "Отменить задание"
     },
     "ConnectionDialog": {
         "CannotConnectTo": "Не удаётся подключиться к Moonraker ({host}).",
@@ -170,9 +175,7 @@
     },
     "CoolDownDialog": {
         "AreYouSure": "Вы уверены, что хотите отключить нагрев?",
-        "CoolDown": "Отключение нагрева",
-        "No": "Нет",
-        "Yes": "Да"
+        "CoolDown": "Отключение нагрева"
     },
     "DevicesDialog": {
         "CanBusInfo": "Только не привязанные узлы могут быть обнаружены. Во избежание проблем со связью рекомендуется подключать к CAN-шине только одно не привязанное устройство. Для получения более подробной информации перейдите по ссылке:",
@@ -190,7 +193,10 @@
     },
     "Dialogs": {
         "StartPrint": {
-            "Cancel": "Отмена",
+            "Afc": {
+                "FilamentTypeMismatch": "Выбраный в G-Коде ({file}) филамент на соответствует выбраному ({lane}).",
+                "FilamentWeightNotEnough": "Не достаточно филамента ({lane}). Требуется: {required}, Доступно: {available}."
+            },
             "DoYouWantToStartFilename": "Запустить печать файла {filename}?",
             "DoYouWantToStartFilenameFilament": "Запустить печать файла {filename} следующим прутком?",
             "Headline": "Запустить печать",
@@ -212,21 +218,19 @@
         "UnsavedChanges": "Несохранённые изменения",
         "UnsavedChangesMessage": "Сохранить изменения внесённые в файл {filename}?",
         "UnsavedChangesSubMessage": "Ваши изменения будут потеряны, если не сохранить их. Вы можете отключить это напоминание в настройках редактора.",
-        "Uploading": "Сохранение"
+        "Uploading": "Сохранение",
+        "ViewModuleDocumentation": "Посмотреть документацию {module}"
     },
     "EmergencyStopDialog": {
         "AreYouSure": "Вы уверены, что хотите это сделать?",
-        "EmergencyStop": "Аварийная остановка",
-        "No": "Нет",
-        "Yes": "Да"
+        "EmergencyStop": "Аварийная остановка"
     },
     "Files": {
         "AddBatchToQueue": "Добавить несколько заданий в очередь",
         "AddToQueue": "Добавить задание в очередь",
         "AllFiles": "Все",
-        "BedTemp": "Темп. стола",
-        "Cancel": "Отмена",
-        "ChamberTemp": "Темп. в камере",
+        "BedTemp": "Температура стола.",
+        "ChamberTemp": "Температура в камере.",
         "Count": "Количество",
         "Create": "Создать",
         "CreateNewDirectory": "Создать папку",
@@ -241,8 +245,9 @@
         "DuplicateFile": "Создать копию файла",
         "EditFile": "Редактировать файл",
         "Empty": "Пусто",
-        "ExtruderTemp": "Темп. экструдера",
+        "ExtruderTemp": "Температура экструдера.",
         "FilamentName": "Имя профиля прутка",
+        "Filaments": "Филаменты",
         "FilamentType": "Тип прутка",
         "FilamentUsage": "Расход прутка",
         "FilamentWeight": "Вес прутка",
@@ -321,7 +326,6 @@
         "VoxelMode": "Воксельный режим (ASMBL)"
     },
     "Heightmap": {
-        "Abort": "Отмена",
         "BedMeshCalibrate": "Калибровка сетки стола",
         "BedMeshRemove": "Удалить сетку стола",
         "Calibrate": "Калибровка",
@@ -349,7 +353,6 @@
         "NoProfile": "Отсутствуют доступные профили.",
         "Probed": "Зондировано",
         "Profiles": "Профили",
-        "Remove": "Удалить",
         "Rename": "Переименовать",
         "RenameBedMeshProfile": "Переимен. профиль сетки стола",
         "ScaleGradient": "Масштаб градиента",
@@ -366,7 +369,6 @@
         "AddToQueueSuccessful": "Файл {filename} добавлен в очередь.",
         "AllJobs": "Все",
         "AvgPrinttime": "Среднее время печати",
-        "Cancel": "Отмена",
         "Chart": "Диаграмма",
         "CreateNote": "Добавление примечания",
         "DateBasedReminder": "Дата",
@@ -430,7 +432,6 @@
         "Reminder": "Напоминание",
         "Repeat": "Повторяющееся",
         "Reprint": "Напечатать повторно",
-        "Save": "Сохранить",
         "Search": "Поиск",
         "SelectedFilamentUsed": "Расход прутка выбранных заданий",
         "SelectedJobs": "Выбрано заданий",
@@ -462,7 +463,6 @@
         "TotalTime": "Общее время работы"
     },
     "JobQueue": {
-        "Cancel": "Отмена",
         "ChangeCount": "Изменить количество",
         "Count": "Количество",
         "Empty": "Пусто",
@@ -477,14 +477,12 @@
     "Machine": {
         "ConfigFilesPanel": {
             "AllFiles": "Все",
-            "Cancel": "Отмена",
             "ConfigFiles": "Конфигурационные файлы",
             "ConfigRootDirectoryDoesntExists": "Папка конфигурации не найден. Пожалуйста, проверьте параметр \"config_path\" в разделе [file_manager] конфигурации Moonraker.",
             "Create": "Создать",
             "CreateDirectory": "Создать папку",
             "CreateFile": "Создать файл",
             "CurrentPath": "Текущий путь",
-            "Delete": "Удалить",
             "DeleteDirectory": "Удалить папку",
             "DeleteDirectoryQuestion": "Вы действительно хотите удалить папку \"{name}\" со всем его содержимым?",
             "DeleteSelectedQuestion": "Выбрано элементов: {count}. Хотите удалить?",
@@ -523,7 +521,6 @@
         },
         "LogfilesPanel": {
             "Accept": "Принять",
-            "Cancel": "Отмена",
             "Logfiles": "Файлы журналов",
             "Rollover": "Сброс данных журналов",
             "RolloverDescription": "Выберите журналы, данные которых хотите сбросить:",
@@ -559,7 +556,6 @@
             "Abort": "Отмена",
             "AreYouSure": "Вы уверены, что хотите это сделать?",
             "CheckForUpdates": "Проверить обновления",
-            "Close": "Закрыть",
             "CommitHistory": "История коммитов",
             "Commits": "Коммиты",
             "CommitsAvailable": "Нет доступных коммитов | Доступен {count} коммит | Доступно коммитов: {count}",
@@ -607,6 +603,84 @@
         "Headline": "Ручное зондирование стола"
     },
     "Panels": {
+        "AfcPanel": {
+            "AfcSettings": "Настройки AFC",
+            "BrushNozzle": "Насадка-щетка",
+            "BufferDisabled": "Буфер не активен",
+            "BypassActive": "Филамент загружен в байпас, смена инструмента не активна!",
+            "Calibrate": "Калибровка",
+            "CaptureTD": "Захват TD",
+            "Color": "Цвет",
+            "DebugJson": "Отладка JSON",
+            "Detected": "Обнаружен",
+            "EjectFilament": "Извлеките филамент",
+            "Ejecting": "Извлечение",
+            "Empty": "Пусто",
+            "Error": "Ошибка",
+            "FilamentForLane": "Филамент для {name}",
+            "Functions": "Функции",
+            "Headline": "AFC",
+            "Hub": "Хаб",
+            "HubLoad": "Загрузка хаба",
+            "Idle": "простой",
+            "InfiniteSpoolDescription": "Следующий филамент для загрузки, если {name} закончится",
+            "InfiniteSpoolHeadline": "Бесконечная катушка",
+            "Initialized": "Инициализированный",
+            "LaneLoadedNone": "ничего",
+            "LaneMapping": "Отображение движения",
+            "LaneMappingToCommand": "Переназначить {name} в команду инструмента",
+            "LedOff": "Выключить светодиоды",
+            "LedOn": "Включить светодиоды",
+            "LoadedInLane": "Загружено в {lane}",
+            "Loading": "Загрузка",
+            "LoadLane": "Загрузка линии",
+            "Material": "Материал",
+            "MaterialSubtitle": "Например ABS, PETG, PLA и т.д.",
+            "Moving": "Перемещение",
+            "ParkNozzle": "Парковка сопла",
+            "PostExtruderSensor": "Датчик после экструдера",
+            "PreExtruderSensor": "Датчик перед экструдером",
+            "PrepDetected": "Филамент обнаружен, но не загружен",
+            "Printing": "Печать",
+            "RammingSensor": "Датчик трамбовки",
+            "Restoring": "Восстановление",
+            "SetSpool": "Установка катушки",
+            "Settings": "Настройки",
+            "SettingsDialog": {
+                "BowdenLength": "Длина Боудена",
+                "BowdenLengthDescription": "Длина трубки боудена между хабом и экструдером",
+                "DistHub": "Растояние до хаба",
+                "DistHubDescription": "Растояние от шестерней подачи до хаба в мм.",
+                "Help": "Помощь",
+                "LoadUnloadLane": "Загрузить / Выгрузить нить",
+                "LoadUnloadLaneDescription": "Нажмите на кнопки для загрузки или выгрузки прутка.",
+                "SaveExtruderValues": "Сохранить значение экструдера",
+                "SaveExtruderValuesDescription": "текущие значение будут записаны в файл конфигурации текущего экструдера.",
+                "SaveHubDist": "Сохранить значение нити",
+                "SaveHubDistDescription": "Сохранить значение для конкретной нити в конфигурационом файле.",
+                "SettingsForTitle": "Настройки для {name}",
+                "ToolSensorAfterExtruder": "Датчик инструмента после экструдера",
+                "ToolSensorAfterExtruderDescription": "Расстояние от шестерен экструдера до датчика положение инструмента (в мм). Это расстояние используется для выгрузки нити из шестерен экструдера после того, как датчик положения инструмента перестанет срабатывать.",
+                "ToolStn": "Длина загрузки инструмента",
+                "ToolStnDescriptionWithEndSensor": "Расстояние от конца датчика до зоны плавления в мм.",
+                "ToolStnDescriptionWithoutEndSensor": "Расстояние от начала датчика до зоны плавления в мм.",
+                "ToolStnDescriptionWithRamming": "Расстояние от шестерен экструдера до зоны плавления в мм.",
+                "ToolStnUnload": "Длина выгрузки инструмента",
+                "ToolStnUnloadDescription": "Расстояние, необходимое для втягивания нити и ее выгрузки из инструмента в мм.",
+                "WriteToFile": "Записать файл"
+            },
+            "ShowFilamentName": "Показать имя филамента",
+            "ShowLaneInfinite": "Показать бесконечную кнопку",
+            "ShowTd1Color": "показать цвет TD-1",
+            "ShowTool": "Показать инструмент \"{name}\"",
+            "ShowUnit": "Показать единицу \"{name}\"",
+            "ShowUnitIcons": "Показать иконку единицы",
+            "Unloading": "Выгрузка",
+            "UnloadLane": "Выгрузить нить",
+            "Weight": "Масса",
+            "WeightSubtitle": "Вес филамента в граммах (без катушки).",
+            "WeightUsed": "использавано {weight}г"
+        },
         "ExtruderControlPanel": {
             "Allowed": "Разрешено",
             "CleanNozzle": "Очистка сопла",
@@ -630,7 +704,8 @@
             "PressureAdvanceSettings": {
                 "Advance": "Pressure Advance",
                 "Extruder": "Экструдер",
-                "SmoothTime": "Время сглаживания PA"
+                "SmoothTime": "Время сглаживания PA",
+                "SyncedWithExtruder": "Синхранизировано с {extruder}"
             },
             "PurgeFilament": "Прочистка от старого материала",
             "Requested": "Запрошено",
@@ -655,6 +730,10 @@
             "PrinterSwitchedOffDescription": "Сейчас принтер выключен и Klipper не может подключиться. Чтобы включить принтер, нажмите кнопку ниже:",
             "Restart": "Перезапустить",
             "ServiceReports": "Отчёты по {service}"
+        },
+        "LedEffectsPanel": {
+            "Headline": "Эффекты светодиододов",
+            "StopAll": "Остановить все эффекты"
         },
         "MachineSettingsPanel": {
             "Headline": "Ограничения принтера",
@@ -698,15 +777,177 @@
                 "Empty": "Отсутствует"
             }
         },
-        "PowerControlPanel": {
-            "Error": "Ошибка",
-            "Off": "Откл.",
-            "On": "Вкл.",
-            "PowerControl": "Управление питанием"
+        "MmuPanel": {
+            "Active": "Активный",
+            "ButtonChangeTool": "Сменить инструмент",
+            "ButtonCheckAllGates": "Проверить все выходы",
+            "ButtonCheckGate": "Проверить выход",
+            "ButtonEject": "Извлечь",
+            "ButtonLoad": "Загрузить",
+            "ButtonLoadExt": "Загрузить Ext",
+            "ButtonPreload": "Предзагрузить",
+            "ButtonPrintStats": "Статистика печати",
+            "ButtonRecover": "Востановить",
+            "ButtonSelect": "Выбрать",
+            "ButtonSyncSpoolman": "Синхранизировать Spoolman",
+            "ButtonUnload": "Выгрузить",
+            "ButtonUnloadExt": "Выгрузить Ext",
+            "ButtonUnlock": "Разблокировать",
+            "Bypass": "Байпас",
+            "Clog": "Засор",
+            "ClogTangleDetection": "Обнаружение засоров/запутывания",
+            "Dialog": {
+                "AreYouSure": "Вы уверены?"
+            },
+            "Disabled": "отключено",
+            "Drying": "Сушка",
+            "DryingCancelled": "Сушка отменена",
+            "DryingComplete": "Сушка завершена",
+            "EditGateMap": "Редактировать филамент",
+            "EditGateMapTitle": "Редактировать филамент (карта затвора)",
+            "EditTtgMap": "Карта инструментов",
+            "EditTtgMapTitle": "Карта инструментов / филаментов (редактировать карту TTG)",
+            "Encoder": "Энкодер",
+            "Extruder": "Экструдер",
+            "Flow": "Поток",
+            "Flowrate": "Расход",
+            "Gate": "Шлюз",
+            "GateMapDialog": {
+                "BadTemperature": "Температура вне диапозона",
+                "ChooseSpool": "Выберите катушку",
+                "FilamentAvailable": "Филамент доступен в шлюзе",
+                "FilamentEmpty": "Филамент не доступен",
+                "FilamentName": "Имя филамента",
+                "FilamentUnknown": "Неизвестное состояние филамента (пожайлуста, укажите)",
+                "LoadSpeed": "Блокировка скорости загрузки",
+                "Material": "Материал",
+                "NoMatchingSpool": "Не найдено подходящих катушек",
+                "Reset": "Сбросить",
+                "ResetConfirmation": "Это сбросит карту шлюзов до стандартных значений, указыных в файле 'mmu_parameters.cfg' или до пустой карты, если значения не доступны",
+                "SelectGate": "выберите информацию о шлюзе/катушке, которую вы хотите редактировать",
+                "Spoolman": "Spoolman",
+                "SpoolmanId": "Spoolman ID",
+                "SpoolmanOff": "Поддержка Spoolman в Happy Hare отключена. Присвоение идентификатора катушки шлюзу отключено",
+                "SpoolmanOther": "Spoolman поддерживается в \"{mode}\". При желании вы можете присвоить идентификатор очереди печати или напрямую отредактировать атрибуты шлюза",
+                "SpoolmanPull": "Поддержка Spoolman работает в режие \"PULL\". Локальное редактирование большинства свойств шлюзов отключено. Назначайте катушку/шлюз в spoolman DB напрямую или используйте команду MMU_SPOOLMAN",
+                "Temperature": "Температура"
+            },
+            "Gear": "шестерня",
+            "Guard": "Защита",
+            "Headline": "MMU",
+            "Heater": "Нагреватель",
+            "LargeFilamentStatus": "Статус большого филамента",
+            "MmuMaintenance": "техническое обслуживание MMu",
+            "MmuMaintenanceDialog": {
+                "Animation": "Анимация",
+                "Config": "Конфигурация",
+                "Down": "Вниз",
+                "Enable": "Разрешить",
+                "EntryLeds": "Светодиоды входа",
+                "EntryLedsDescription": "Выберите эффект, с которым должны загораться светодиоды.",
+                "ExitLeds": "Светодиоды выхода",
+                "ExitLedsDescription": "Выберите эффект, с которым должны гаснуть светодиоды.",
+                "ExtruderOnly": "Только экструдер",
+                "Grip": "схватить",
+                "Home": "Дом",
+                "Intro": "Прямое управление конкрретными функциями MMU и выборочной конфигурацией.",
+                "LedOptions": {
+                    "FilamentColor": "Цвет филамента",
+                    "GateStatus": "Статус шлюза",
+                    "Off": "Выключить",
+                    "On": "Включить",
+                    "SlicerColor": "Цвет слайсера"
+                },
+                "Load": "Загрузить",
+                "MmuMotors": "двигатели MMU",
+                "MotorSync": "Синхронизация мотора экструдера",
+                "Move": "Передвинуть",
+                "Off": "Выключить",
+                "On": "Включить",
+                "Release": "Релиз",
+                "Selector": "Переключатель",
+                "StatusLeds": "Статус светодиодов",
+                "StatusLedsDescription": "Выберите эффект, с которым должны загораться светодиоды, отображающие состояние.",
+                "Sync": "Синхронизация",
+                "TMacroColorOptions": {
+                    "AllGates": "Все шлюзы",
+                    "GateMap": "карта шлюзов",
+                    "Off": "Выключить",
+                    "Slicer": "Слайсер"
+                },
+                "TxMacroColor": "Цвет макроса Tx",
+                "TxMacroColorDescription": "Какой цвет должен отображаться на кнопке макроса Tx в панели управления экструдера?",
+                "Unload": "Выгрузить",
+                "Unsync": "Рассинхронизировать",
+                "Up": "Вверх"
+            },
+            "MmuMaintenanceTitle": "Техническое обслуживание ММУ",
+            "MmuRecoverDialog": {
+                "FilamentPosition": "Позиция филамента",
+                "FilamentPositionDescription": "Полностью ли загружен филамент в экструдер или полностью выгружена?",
+                "Gate": "Шлюз",
+                "GateBypass": "Шлюз установлен на байпас!",
+                "GateDescription": "Установите для смены текущего шлюза",
+                "Intro": "Низкоуровневое восстановление, используемое в случае, если Happy Hare не синхронизирован с вашим MMU. Рекомдуется сначала попробывать автоматическое востановление, однако это может потребоваться для корректировки текущего инструмента или шлюза ( в качестве альтернативы вы можете выгрузить и обнулить селектор типа А MMU).",
+                "Loaded": "Загружен",
+                "NoGate": "Шлюз должен быть выбран",
+                "NoPosition": "Попытка восстановить позицию",
+                "NoTool": "Инструмент должен быть выбран",
+                "Remap": "Это переназначит шлюз для {tool}",
+                "Tool": "Инструмент",
+                "ToolBypass": "Инструмент установлен на байпас!",
+                "ToolDescription": "Установить текущий инструмент",
+                "Unknown": "Неизвестный",
+                "Unloaded": "Выгруженный",
+                "WarningPrefix": "Предупреждение:"
+            },
+            "Ok": "Ок",
+            "PreGate": "Пре-шлюз",
+            "RecoverState": "исправить состояние MMU",
+            "ShowClogTangleDetection": "Обнаружение засоров/заупутывания",
+            "ShowDetails": "Детали филамента",
+            "ShowLogos": "Отображаемый логотип",
+            "ShowName": "Имя отображаемых единиц",
+            "ShowTtgMap": "Карта TTG",
+            "ShowUnavailableSpoolColor": "Показать недоступные катушки",
+            "StartPrintDialogMmu": {
+                "MultiColor": "Это выглядит как многоцветная печать с одним экструдером с использованием {numTools} инструментов. Возможно вам нужно проверить сопостовление инструментов",
+                "SingleColor": "Это выглядит как одноцветная печать, но у вас не выбран режим байпаса на MMU. Возможно, вам нужно проверить свой инструмент"
+            },
+            "Tangle": "Запутать",
+            "Toolhead": "Голова инструмента",
+            "ToolMapping": "Сопоставление инструментов",
+            "ToolTip": {
+                "Color": "Цвет",
+                "Empty": "Пустота",
+                "SpoolId": "ID катушки"
+            },
+            "TtgMapDialog": {
+                "AllTools": "Все инструменты",
+                "Bypass": "Байпас",
+                "Color": "Цвет",
+                "EndlessSpool": "ES ∞",
+                "FilamentInfo": "Информация о филаменте",
+                "Gate": "Шлюз",
+                "MapSlicerTools": "сомоставте инструменты слайсера с MMU шлюзами для печати",
+                "MapTools": "сопаставте инструменты с шлюзами MMU",
+                "Material": "Материал",
+                "Mismatch": "Возможное несоответствие фиаламента:",
+                "NoGateData": "Нет данных шлюза",
+                "None": "Отсутствует",
+                "NoSlicerInfo": "Нет информации слайсера, выберите стандартное сопоставление для {tool}",
+                "Reset": "Сбросить",
+                "ResetConfirmation": "Это сбросит все сопоставление инструмента с шлюзом и группы бесконечных катушек до значений, указаных в файле 'mmu_parameters.cfg' или до стандартных значений 1:1, если значения не доступны",
+                "SelectTool": "Выбирете инструмент для отображения, затем выберите шлюз из списка",
+                "SkipAutomap": "Пропустить автокарту",
+                "SlicerExpects": "Ожидает слайсер",
+                "Temperature": "Температура",
+                "ToolNotUsed": "{tool} не используется в этой печати, выберите стандартное сопоставление"
+            },
+            "Unknown": "Неизвестный"
         },
         "SpoolmanPanel": {
             "ActiveSpool": "Активная катушка",
-            "Cancel": "Отмена",
             "ChangeSpool": "Сменить катушку",
             "DaysAgo": "Дней назад: {days}",
             "EjectSpool": "Извлечь катушку",
@@ -742,7 +983,6 @@
             "Estimate": "Расчётное время",
             "ETA": "Время завершения",
             "ExcludeObject": {
-                "Cancel": "Отмена",
                 "Excluded": "Исключена",
                 "ExcludeObject": "Исключить модель",
                 "ExcludeObjectHeadline": "Исключить модель",
@@ -776,6 +1016,7 @@
             "ResumePrint": "Продолжить печать",
             "Slicer": "Слайсер",
             "Speed": "Скорость",
+            "Toolchange": "Смена инструмента",
             "Total": "Всего",
             "TotalTime": "Общее время",
             "Unknown": "Неизвестно"
@@ -798,6 +1039,7 @@
             "Min": "Мин.",
             "Name": "Датчик",
             "Presets": "Профили",
+            "Settings": "Настройки",
             "SetupTemperatures": "Настройки температуры",
             "ShowChart": "Показать график",
             "ShowNameInChart": "Показать {name} на графике",
@@ -805,8 +1047,7 @@
             "State": "Мощность",
             "Target": "Заданная",
             "TemperaturesInChart": "Температуры [°C]",
-            "TempTooHigh": "Слишком высокая температура для {name}! (макс.: {max})",
-            "TempTooLow": "Слишком низкая температура для {name}! (мин.: {min})"
+            "TurnHeaterOff": "Выключить нагреватель"
         },
         "ToolheadControlPanel": {
             "Absolute": "Абсолютная",
@@ -826,6 +1067,7 @@
         },
         "WebcamPanel": {
             "All": "Все",
+            "BrowserNotSupported": "Ваш браузер не поддерживает этот тип веб-камеры.",
             "ConnectingTo": "Подключение к {url}",
             "Disconnected": "Отключено",
             "ErrorWhileConnecting": "Ошибка при подключении к {url}",
@@ -839,7 +1081,6 @@
             "Headline": "Смещение Z коорд.",
             "Later": "Позже",
             "Ok": "OK",
-            "Save": "Сохранить",
             "SaveConfig": "СОХРАНИТЬ КОНФИГУРАЦИЮ",
             "SaveInfoDescription": "Новое смещение координат оси Z было рассчитано и зарегистрировано. Нажмите кнопку «СОХРАНИТЬ КОНФИГУРАЦИЮ» для сохранения в файле printer.cfg и перезапуска Klipper.",
             "SaveInfoDescriptionPrint": "Новое смещение координат оси Z было рассчитано и зарегистрировано. После печати, нажмите кнопку «СОХРАНИТЬ КОНФИГУРАЦИЮ» на верхней панели для сохранения и перезапуска Klipper.",
@@ -848,10 +1089,8 @@
     },
     "PowerDeviceChangeDialog": {
         "AreYouSure": "Вы уверены, что хотите это сделать?",
-        "No": "Нет",
         "TurnDeviceOff": "Выключить {device}",
-        "TurnDeviceOn": "Включить {device}",
-        "Yes": "Да"
+        "TurnDeviceOn": "Включить {device}"
     },
     "Router": {
         "Console": "Консоль",
@@ -895,8 +1134,6 @@
         "YouCanFindMore": "Более подробную информацию можете найти на"
     },
     "Settings": {
-        "Cancel": "Отмена",
-        "Close": "Закрыть",
         "ConsoleTab": {
             "AddFilter": "Добавить фильтр",
             "Console": "Консоль",
@@ -963,6 +1200,7 @@
             "ConfirmUnsavedChanges": "Запрос на сохранение или отмену несохранённых изменений",
             "ConfirmUnsavedChangesDescription": "Если включено, то для сохранения или отмены внесенных изменений требуется подтверждение. Если отключено, изменения отклоняются без предупреждения.",
             "Editor": "Редактор",
+            "KlipperDocsTooltips": "Включить всплывающие подсказки для документации Klipper",
             "KlipperRestartMethod": "Метод перезапуска Klipper",
             "KlipperRestartMethodDescription": "Выберите, какой метод перезапуска будет использоваться при нажатии «Сохранить и перезапустить» при редактировании файлов конфигурации Klipper.",
             "Spaces": "Пробелов: {count}",
@@ -1088,22 +1326,27 @@
             "Color": "Цвет",
             "CreateGroup": "Создать группу",
             "CreatePreset": "Создать профиль",
+            "EditGroup": "Редактирование группы",
+            "EditPreset": "Редактирование предустановки",
             "End": "Конечный",
             "EndDescription": "Последняя LED-лента этой группы.",
+            "GreaterThanZero": "Значение должно быть больше 0.",
             "Groups": "Группы",
             "GroupSubTitle": "Начальный: {start}, конечный: {end}",
+            "HigherThanStart": "Конечное значение должно быть выше начального значения.",
+            "LessThanChainCount": "Значение должно быть меньше общего кличества светодиодов ({count}).",
             "LightGroups": "{name} - Группы",
             "LightPresets": "{name} - профиль",
             "Miscellaneous": "Разное",
             "Name": "Имя",
+            "NameExists": "Имя уже используется.",
             "NoDevicesFound": "Устройства не найдены",
             "NoGroupFound": "Группы не найдены",
             "NoPresetFound": "Профили не найдены",
             "Presets": "Профили",
+            "Required": "Это поле обязательно.",
             "Start": "Начальный",
-            "StartDescription": "Первая LED-лента этой группы.",
-            "UnableToLoadLight": "Не удаётся загрузить свет",
-            "UnableToLoadPreset": "Не удаётся загрузить профиль"
+            "StartDescription": "Первая LED-лента этой группы."
         },
         "NavigationTab": {
             "Navigation": "Навигация"
@@ -1293,6 +1536,7 @@
         "Update": "Обновить",
         "WebcamsTab": {
             "AddWebcam": "Добавить видеокамеру",
+            "AspectRatio": "Соотношение сторон",
             "Color": "Цвет",
             "CreateWebcam": "Создать видеокамеру",
             "EditCrowsnestConf": "Редактировать crowsnest.conf",
@@ -1303,6 +1547,8 @@
             "HideFps": "Скрыть счётчик кадров",
             "Hlsstream": "HLS-поток",
             "Horizontally": "Горизонтали",
+            "HtmlIframe": "HTML Iframe",
+            "HtmlVideo": "HTML видео",
             "IconBed": "Стол",
             "IconCam": "Видеокамера",
             "IconDoor": "Дверь",
@@ -1311,6 +1557,7 @@
             "IconMcu": "Микроконтроллёр",
             "IconNozzle": "Сопло",
             "IconPrinter": "Принтер",
+            "InvalidAspectRatio": "Должно быть ШИРИНА:ВЫСОТА (например, 16:9)",
             "JMuxerStream": "Сырой H264 поток (jmuxer)",
             "Mjpegstreamer": "MJPEG-поток",
             "MjpegstreamerAdaptive": "Адаптивный MJPEG-поток",
@@ -1338,11 +1585,9 @@
     "Timelapse": {
         "AllFiles": "Все",
         "Autorender": "Авторендеринг",
-        "Cancel": "Отмена",
         "Create": "Создать",
         "CreateNewDirectory": "Создать папку",
         "CurrentPath": "Текущий путь",
-        "Delete": "Удалить",
         "DeleteDirectory": "Удалить папку",
         "DeleteDirectoryQuestion": "Вы действительно хотите удалить папку \"{name}\" со всем его содержимым?",
         "DeleteSelectedQuestion": "Выбрано файлов: {count}. Хотите удалить?",

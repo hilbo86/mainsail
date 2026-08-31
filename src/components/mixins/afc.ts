@@ -1,8 +1,13 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
+import { ServerSpoolmanStateSpool } from '@/store/server/spoolman/types'
 
 @Component
 export default class AfcMixin extends Vue {
+    get afcExists() {
+        return 'AFC' in this.$store.state.printer
+    }
+
     get afc() {
         return this.$store.state.printer.AFC ?? {}
     }
@@ -64,16 +69,19 @@ export default class AfcMixin extends Vue {
 
     get afcMapList(): string[] {
         const lanes = this.afc.lanes ?? []
+        const seen = new Set<string>()
 
-        const mapList = []
         for (const laneName of lanes) {
             const lane = this.getAfcLaneObject(laneName)
-            if (lane === null) continue
+            if (!lane?.map) continue
 
-            mapList.push(lane.map)
+            const tools = Array.isArray(lane.map) ? lane.map : [lane.map]
+            for (const tool of tools) {
+                if (tool) seen.add(tool)
+            }
         }
 
-        return mapList.sort()
+        return [...seen].sort((a, b) => a.localeCompare(b))
     }
 
     get afcExistsSpoolman() {
@@ -100,6 +108,10 @@ export default class AfcMixin extends Vue {
         return this.$store.state.gui.view.afc?.hiddenUnits ?? []
     }
 
+    get afcCurrentToolchange() {
+        return this.afc.current_toolchange ?? undefined
+    }
+
     getPrinterObject(key: string) {
         const printer = this.$store.state.printer ?? {}
         return printer[key] ?? null
@@ -121,6 +133,20 @@ export default class AfcMixin extends Vue {
         const key_stepper = `AFC_stepper ${lane}`
         const key_lane = `AFC_lane ${lane}`
         return this.getPrinterSettings(key_stepper) ?? this.getPrinterSettings(key_lane) ?? {}
+    }
+
+    getAfcLaneFilament(laneName: string) {
+        const lane = this.getAfcLaneObject(laneName)
+        const spoolId = lane?.spool_id ?? 0
+        const spools = this.$store.state.server.spoolman?.spools || []
+        const spool = spools.find((spool: ServerSpoolmanStateSpool) => spool.id === spoolId) || null
+
+        return {
+            color: lane?.color ?? '#000000',
+            name: spool?.filament?.name ?? '--',
+            type: lane?.material ?? '--',
+            weight: lane?.weight ?? 0,
+        }
     }
 
     getAfcExtruderObject(extruder: string) {
