@@ -12,9 +12,9 @@ export default function buildVersion(): PluginOption {
         name: 'build-version',
         writeBundle: () => {
             setImmediate(async () => {
-                const versionIdentifier = version.toString()
+                const versionIdentifier = process.env.MAINSAIL_BUILD_VERSION ?? `v${version.toString()}`
                 const versionFile = await fs.promises.open(path.resolve(__dirname, '../../dist/.version'), 'w')
-                await versionFile.writeFile(`v${versionIdentifier}`)
+                await versionFile.writeFile(versionIdentifier)
                 await versionFile.close()
             })
         },
