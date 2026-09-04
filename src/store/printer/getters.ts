@@ -324,6 +324,7 @@ export const getters: GetterTree<PrinterState, RootState> = {
                 type: nameSplit[0],
                 value: typeof value.value === 'number' ? value.value : null,
                 unit: typeof value.unit === 'string' ? value.unit : '',
+                decimalPlaces: typeof value.decimal_places === 'number' ? value.decimal_places : 2,
             }
             if (nameSplit[0] == 'load_cell') {
                 output.push({

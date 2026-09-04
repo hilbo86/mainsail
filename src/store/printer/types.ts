@@ -122,6 +122,7 @@ export interface PrinterStateMiscellaneousSensor {
     name: string
     value: number | null
     unit: string
+    decimalPlaces: number
 }
 
 export interface PrinterStateFilamentSensors {

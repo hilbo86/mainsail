@@ -88,3 +88,39 @@ describe('printer/getEstimatedTimeETAFormat', () => {
         expect(runGetter(eta, true)).toBe('01:00 AM +1')
     })
 })
+
+describe('printer/getMiscellaneousSensors', () => {
+    const runGetter = (state: PrinterState) =>
+        getters.getMiscellaneousSensors(state, {}, {} as RootState, {}) as Array<{
+            name: string
+            decimalPlaces: number
+        }>
+
+    it('exposes the configured analog input decimal places', () => {
+        const sensors = runGetter({
+            'analog_input rail_voltage': {
+                value: 12.2,
+                unit: 'V',
+                decimal_places: 3,
+            },
+        })
+
+        expect(sensors).toEqual([
+            expect.objectContaining({
+                name: 'rail_voltage',
+                decimalPlaces: 3,
+            }),
+        ])
+    })
+
+    it('uses two decimal places with older Klipper versions', () => {
+        const sensors = runGetter({
+            'analog_input rail_voltage': {
+                value: 12.2,
+                unit: 'V',
+            },
+        })
+
+        expect(sensors[0].decimalPlaces).toBe(2)
+    })
+})

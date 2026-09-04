@@ -41,7 +41,8 @@
                 :name="sensor.name"
                 :type="sensor.type"
                 :value="sensor.value"
-                :unit="sensor.unit" />
+                :unit="sensor.unit"
+                :decimal-places="sensor.decimalPlaces" />
         </div>
         <div v-for="(sensor, index) of moonrakerSensors" :key="'moonraker_sensor_' + index">
             <v-divider

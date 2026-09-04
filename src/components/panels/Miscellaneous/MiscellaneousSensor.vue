@@ -28,14 +28,12 @@ export default class MiscellaneousSensor extends Mixins(BaseMixin) {
     @Prop({ type: String, required: true }) declare readonly type: string
     @Prop({ type: Number, default: null }) declare readonly value: number | null
     @Prop({ type: String, default: '' }) declare readonly unit: string
+    @Prop({ type: Number, default: 2 }) declare readonly decimalPlaces: number
 
     get output(): string {
         if (this.value === null || !Number.isFinite(this.value)) return '--'
 
-        let value = this.value
-        if (this.type === 'analog_input') {
-            value = Math.sign(value) * Math.round((Math.abs(value) + Number.EPSILON) * 100) / 100
-        }
+        const value = this.type === 'analog_input' ? this.value.toFixed(this.decimalPlaces) : `${this.value}`
 
         return this.unit ? `${value} ${this.unit}` : `${value}`
     }

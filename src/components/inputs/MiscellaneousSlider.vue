@@ -318,7 +318,7 @@ export default class MiscellaneousSlider extends Mixins(BaseMixin) {
     get currentClasses() {
         if (!this.controllable) return ['mr-3', 'mt-1']
 
-        return ['mt-2']
+        return ['mr-3', 'mt-2']
     }
 
     get ledChannelName() {
