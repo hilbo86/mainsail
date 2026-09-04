@@ -1,0 +1,160 @@
+name: Sync and release TH-Mod
+
+run-name: Sync and release TH-Mod (${{ github.event_name }})
+
+on:
+  push:
+    branches:
+      - TH-Mod
+  schedule:
+    - cron: '25 4 * * *'
+  workflow_dispatch:
+    inputs:
+      force_release:
+        type: boolean
+        description: Create a release even when upstream has not changed
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-and-release-th-mod
+  cancel-in-progress: false
+
+jobs:
+  sync-test-release:
+    name: Sync, test, and release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout TH-Mod
+        uses: actions/checkout@v6
+        with:
+          ref: TH-Mod
+          fetch-depth: 0
+          token: ${{ secrets.PAT || github.token }}
+
+      - name: Merge upstream into fork branches
+        id: sync
+        shell: bash
+        env:
+          FORCE_RELEASE: ${{ inputs.force_release || 'false' }}
+        run: |
+          set -euo pipefail
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git remote add upstream https://github.com/mainsail-crew/mainsail.git 2>/dev/null || \
+            git remote set-url upstream https://github.com/mainsail-crew/mainsail.git
+          git fetch origin \
+            develop:refs/remotes/origin/develop \
+            TH-Mod:refs/remotes/origin/TH-Mod
+          git fetch upstream develop:refs/remotes/upstream/develop
+
+          git switch -C develop origin/develop
+          if ! git merge-base --is-ancestor upstream/develop develop; then
+            git merge --no-edit upstream/develop
+          fi
+
+          git switch -C TH-Mod origin/TH-Mod
+          before_sha="$(git rev-parse HEAD)"
+          if ! git merge-base --is-ancestor develop TH-Mod; then
+            git merge --no-edit develop
+          fi
+          target_sha="$(git rev-parse HEAD)"
+
+          branch_changed=false
+          if [[ "${before_sha}" != "${target_sha}" ]]; then
+            branch_changed=true
+          fi
+
+          should_release=false
+          if [[ "${branch_changed}" == 'true' || "${GITHUB_EVENT_NAME}" == 'push' || "${FORCE_RELEASE}" == 'true' ]]; then
+            should_release=true
+          fi
+
+          echo "branch_changed=${branch_changed}" >> "${GITHUB_OUTPUT}"
+          echo "release=${should_release}" >> "${GITHUB_OUTPUT}"
+          echo "target_sha=${target_sha}" >> "${GITHUB_OUTPUT}"
+
+      - name: Generate release version
+        if: steps.sync.outputs.release == 'true'
+        id: release-version
+        shell: bash
+        run: |
+          month_day=$((10#$(date -u +%m%d)))
+          echo "value=v$(date -u +%Y).${month_day}.${GITHUB_RUN_NUMBER}" >> "${GITHUB_OUTPUT}"
+
+      - name: Install Node.js
+        if: steps.sync.outputs.release == 'true'
+        uses: actions/setup-node@v6
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        if: steps.sync.outputs.release == 'true'
+        run: npm ci
+
+      - name: Lint
+        if: steps.sync.outputs.release == 'true'
+        run: npm run lint
+
+      - name: Run unit tests
+        if: steps.sync.outputs.release == 'true'
+        run: npm run test:unit
+
+      - name: Build release archive
+        if: steps.sync.outputs.release == 'true'
+        env:
+          MAINSAIL_BUILD_VERSION: ${{ steps.release-version.outputs.value }}
+          MAINSAIL_PROJECT_NAME: ${{ github.event.repository.name }}
+          MAINSAIL_PROJECT_OWNER: ${{ github.repository_owner }}
+        run: npm run build
+
+      - name: Verify release metadata
+        if: steps.sync.outputs.release == 'true'
+        shell: bash
+        env:
+          MAINSAIL_BUILD_VERSION: ${{ steps.release-version.outputs.value }}
+          MAINSAIL_PROJECT_NAME: ${{ github.event.repository.name }}
+          MAINSAIL_PROJECT_OWNER: ${{ github.repository_owner }}
+        run: |
+          set -euo pipefail
+          unzip -p dist/mainsail.zip release_info.json > /tmp/release_info.json
+          diff -u dist/release_info.json /tmp/release_info.json
+          node --input-type=module -e "
+            import fs from 'node:fs';
+            const info = JSON.parse(fs.readFileSync('dist/release_info.json', 'utf8'));
+            if (info.version !== process.env.MAINSAIL_BUILD_VERSION ||
+                info.project_name !== process.env.MAINSAIL_PROJECT_NAME ||
+                info.project_owner !== process.env.MAINSAIL_PROJECT_OWNER) {
+              throw new Error('Invalid release_info.json');
+            }
+          "
+
+      - name: Push validated branches
+        if: steps.sync.outputs.branch_changed == 'true'
+        run: git push --atomic origin develop TH-Mod
+
+      - name: Upload workflow artifact
+        if: steps.sync.outputs.release == 'true'
+        uses: actions/upload-artifact@v5
+        with:
+          name: mainsail-${{ steps.release-version.outputs.value }}
+          path: dist/mainsail.zip
+
+      - name: Create stable GitHub release
+        if: steps.sync.outputs.release == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.PAT || github.token }}
+          RELEASE_VERSION: ${{ steps.release-version.outputs.value }}
+          TARGET_SHA: ${{ steps.sync.outputs.target_sha }}
+        shell: bash
+        run: |
+          gh release create "${RELEASE_VERSION}" dist/mainsail.zip \
+            --repo "${GITHUB_REPOSITORY}" \
+            --target "${TARGET_SHA}" \
+            --title "Mainsail TH-Mod ${RELEASE_VERSION}" \
+            --generate-notes \
+            --latest
