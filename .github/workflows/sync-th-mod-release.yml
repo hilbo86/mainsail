@@ -155,6 +155,6 @@ jobs:
           gh release create "${RELEASE_VERSION}" dist/mainsail.zip \
             --repo "${GITHUB_REPOSITORY}" \
             --target "${TARGET_SHA}" \
-            --title "Mainsail TH-Mod ${RELEASE_VERSION}" \
+            --title "${RELEASE_VERSION}" \
             --generate-notes \
             --latest
