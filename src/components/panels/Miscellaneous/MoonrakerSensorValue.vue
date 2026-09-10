@@ -36,9 +36,15 @@ export default class MoonrakerSensorValue extends Mixins(BaseMixin) {
 
     get parameterConfig() {
         const name = `parameter_${this.valueName}`
-        if (!(name in this.sensorConfig)) return {}
+        const reportedConfig =
+            this.sensorStatus?.parameter_info?.find((parameter) => parameter.name === this.valueName) ?? {}
+        const configuredValue = name in this.sensorConfig ? this.sensorConfig[name] : {}
 
-        return this.sensorConfig[name]
+        return { ...reportedConfig, ...configuredValue }
+    }
+
+    get sensorStatus() {
+        return this.$store.state.server.sensor.sensors[this.sensor]
     }
 
     get unit() {

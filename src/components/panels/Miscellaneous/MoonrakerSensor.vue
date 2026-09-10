@@ -12,6 +12,9 @@
                         :sensor="name"
                         :value-name="valueName" />
                 </v-subheader>
+                <v-alert v-if="sensor?.error" dense text type="error" class="mx-0 mb-0 mt-2">
+                    {{ sensor.error }}
+                </v-alert>
             </v-col>
         </v-row>
     </v-container>

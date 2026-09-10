@@ -17,4 +17,10 @@ export const mutations: MutationTree<ServerSensorState> = {
 
         Vue.set(state.sensors[payload.key], 'values', payload.value)
     },
+
+    updateSensorError(state, payload) {
+        if (!(payload.key in state.sensors)) return
+
+        Vue.set(state.sensors[payload.key], 'error', payload.value)
+    },
 }

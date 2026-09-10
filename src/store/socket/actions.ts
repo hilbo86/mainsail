@@ -139,6 +139,10 @@ export const actions: ActionTree<SocketState, RootState> = {
                 dispatch('server/sensor/updateSensors', payload.params[0], { root: true })
                 break
 
+            case 'notify_sensor_error':
+                dispatch('server/sensor/updateSensorErrors', payload.params[0], { root: true })
+                break
+
             default:
                 window.console.debug(payload)
         }

@@ -9,7 +9,7 @@ export const actions: ActionTree<ServerSensorState, RootState> = {
     },
 
     init() {
-        Vue.$socket.emit('server.sensors.list', {}, { action: 'server/sensor/getSensors' })
+        Vue.$socket.emit('server.sensors.list', { extended: true }, { action: 'server/sensor/getSensors' })
     },
 
     getSensors({ commit, dispatch }, payload) {
@@ -21,6 +21,12 @@ export const actions: ActionTree<ServerSensorState, RootState> = {
     updateSensors({ commit }, payload) {
         Object.keys(payload).forEach((key) => {
             commit('updateSensor', { key, value: payload[key] })
+        })
+    },
+
+    updateSensorErrors({ commit }, payload) {
+        Object.keys(payload).forEach((key) => {
+            commit('updateSensorError', { key, value: payload[key] })
         })
     },
 }
