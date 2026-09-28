@@ -32,7 +32,7 @@ jobs:
         with:
           ref: TH-Mod
           fetch-depth: 0
-          token: ${{ secrets.PAT || github.token }}
+          token: ${{ secrets.WORKFLOW_TOKEN || github.token }}
 
       - name: Merge upstream into fork branches
         id: sync
@@ -147,7 +147,7 @@ jobs:
       - name: Create stable GitHub release
         if: steps.sync.outputs.release == 'true'
         env:
-          GH_TOKEN: ${{ secrets.PAT || github.token }}
+          GH_TOKEN: ${{ secrets.WORKFLOW_TOKEN || github.token }}
           RELEASE_VERSION: ${{ steps.release-version.outputs.value }}
           TARGET_SHA: ${{ steps.sync.outputs.target_sha }}
         shell: bash
