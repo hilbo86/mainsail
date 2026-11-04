@@ -26,6 +26,7 @@ export const additionalSensors = [
     'aht2x',
     'aht3x',
     'bme280',
+    'dht_status',
     'htu21d',
     'sgp40',
     'sht3x',
