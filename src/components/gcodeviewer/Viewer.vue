@@ -280,6 +280,7 @@ import {
 } from '@mdi/js'
 import ConfirmationDialog from '@/components/dialogs/ConfirmationDialog.vue'
 import { Debounce } from 'vue-debounce-decorator'
+import { toolWorkBounds } from '@/utils/laserTool'
 
 interface downloadSnackbar {
     status: boolean
@@ -1052,6 +1053,14 @@ export default class Viewer extends Mixins(BaseMixin) {
     }
 
     get bedMaxSize() {
+        const printer = this.$store.state.printer
+        const bounds = toolWorkBounds(
+            printer.laser_tool_manager,
+            printer.gcode_move?.position ?? [],
+            printer.gcode_move?.gcode_position ?? [],
+            true
+        )
+        if (bounds) return [...bounds, printer.toolhead?.axis_maximum?.[2] ?? 0]
         return (
             this.$store.state.printer.toolhead?.axis_maximum ??
             this.$store.state.gui?.gcodeViewer?.klipperCache?.axis_maximum ??
@@ -1060,6 +1069,14 @@ export default class Viewer extends Mixins(BaseMixin) {
     }
 
     get bedMinSize() {
+        const printer = this.$store.state.printer
+        const bounds = toolWorkBounds(
+            printer.laser_tool_manager,
+            printer.gcode_move?.position ?? [],
+            printer.gcode_move?.gcode_position ?? [],
+            false
+        )
+        if (bounds) return [...bounds, printer.toolhead?.axis_minimum?.[2] ?? 0]
         return (
             this.$store.state.printer.toolhead?.axis_minimum ??
             this.$store.state.gui?.gcodeViewer?.klipperCache?.axis_minimum ??

@@ -734,6 +734,19 @@
             "Restart": "Restart",
             "ServiceReports": "{service} reports"
         },
+        "LaserToolStatus": {
+            "Armed": "Tool power enabled for this job",
+            "Calibrating": "Calibration active; preserve the XY reference",
+            "CoolingActive": "Main cooling circuit running (operation, maintenance or afterrun)",
+            "Disarmed": "Tool power disabled",
+            "HomeZ": "Home Z to the top",
+            "Invalid": "Calibration reference lost; start again",
+            "JobTool": "Required job tool",
+            "MachineRange": "Machine travel range",
+            "Tool": "Detected tool",
+            "ZHeld": "IR: Z referenced and held at the top",
+            "ZRequired": "IR: home Z to the top before enabling power"
+        },
         "LedEffectsPanel": {
             "Headline": "LED Effects",
             "StopAll": "Stop All Effects"

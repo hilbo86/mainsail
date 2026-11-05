@@ -60,7 +60,7 @@
                             :step="0.001"
                             :current-pos="gcodePositions.z"
                             :readonly="['printing'].includes(printer_state)"
-                            :disabled="!zAxisHomed"
+                            :disabled="!zAxisHomed || irZLocked"
                             @submit="sendCmd" />
                     </v-col>
                 </v-row>

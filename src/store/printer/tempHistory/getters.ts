@@ -6,6 +6,7 @@ import {
     PrinterTempHistoryStateSourceEntry,
 } from '@/store/printer/tempHistory/types'
 import { RootState } from '@/store/types'
+import { toolSensorVisible } from '@/utils/laserTool'
 
 export const getters: GetterTree<PrinterTempHistoryState, RootState> = {
     getDatasetColor: (_, getters) => (name: string) => {
@@ -161,6 +162,11 @@ export const getters: GetterTree<PrinterTempHistoryState, RootState> = {
                     selected[seriesName] = false
                 })
         }
+
+        Object.keys(selected).forEach((name) => {
+            const sensor = name.slice(0, name.lastIndexOf('-'))
+            if (!toolSensorVisible(rootState.printer?.laser_tool_manager, sensor)) selected[name] = false
+        })
 
         return selected
     },

@@ -3,6 +3,10 @@ import Component from 'vue-class-component'
 
 @Component
 export default class ControlMixin extends Vue {
+    get irZLocked(): boolean {
+        return this.$store.state.printer.laser_tool_manager?.ir_z_locked ?? false
+    }
+
     get absolute_coordinates() {
         return this.$store.state.printer?.gcode_move?.absolute_coordinates ?? true
     }

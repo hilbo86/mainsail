@@ -55,6 +55,7 @@ import Component from 'vue-class-component'
 import { Mixins } from 'vue-property-decorator'
 import BaseMixin from '@/components/mixins/base'
 import TemperaturePanelListItemNevermore from '@/components/panels/Temperature/TemperaturePanelListItemNevermore.vue'
+import { toolSensorVisible } from '@/utils/laserTool'
 
 @Component({
     components: { TemperaturePanelListItemNevermore },
@@ -100,6 +101,7 @@ export default class TemperaturePanelList extends Mixins(BaseMixin) {
 
     get temperature_sensors() {
         return this.filterNamesAndSort(this.available_sensors).filter((fullName: string) => {
+            if (!toolSensorVisible(this.$store.state.printer.laser_tool_manager, fullName)) return false
             if (this.available_heaters.includes(fullName)) return false
             if (this.temperature_fans.includes(fullName)) return false
 

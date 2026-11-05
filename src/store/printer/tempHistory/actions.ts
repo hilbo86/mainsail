@@ -13,6 +13,7 @@ import {
     PrinterTempHistoryStateSourceEntry,
 } from '@/store/printer/tempHistory/types'
 import { RootState } from '@/store/types'
+import { auxHistoryNames, toolSensorValid, toolTemperatureSensors } from '@/utils/laserTool'
 
 export const actions: ActionTree<PrinterTempHistoryState, RootState> = {
     reset({ commit, state }) {
@@ -21,7 +22,7 @@ export const actions: ActionTree<PrinterTempHistoryState, RootState> = {
         commit('reset')
     },
 
-    init({ commit, rootGetters, dispatch }, payload) {
+    init({ commit, rootGetters, rootState, dispatch }, payload) {
         window.console.debug('init printer/tempHistory')
         dispatch('reset')
 
@@ -50,6 +51,10 @@ export const actions: ActionTree<PrinterTempHistoryState, RootState> = {
                 }
 
                 const datasetValues = payload[key]
+                // Physical-channel history has no tool activity/validity attribution.
+                if (rootState.printer?.laser_tool_manager && toolTemperatureSensors.includes(key)) {
+                    datasetValues.temperatures = datasetValues.temperatures.map(() => null)
+                }
                 datasetTypes.forEach((datasetKey) => {
                     if (datasetKey + 's' in datasetValues) {
                         const length = maxHistory - datasetValues[datasetKey + 's'].length
@@ -104,6 +109,9 @@ export const actions: ActionTree<PrinterTempHistoryState, RootState> = {
             for (let i = 0; i < maxHistory; i++) {
                 const tmpDataset: PrinterTempHistoryStateSourceEntry = {
                     date: new Date(now.getTime() - 1000 * (maxHistory - i)),
+                }
+                if (rootState.printer?.laser_tool_manager) {
+                    auxHistoryNames.forEach((name) => (tmpDataset[`${name}-temperature`] = null))
                 }
 
                 Object.keys(importData).forEach((objectName) => {
@@ -228,6 +236,10 @@ export const actions: ActionTree<PrinterTempHistoryState, RootState> = {
                 })
             })
 
+            if (rootState.printer?.laser_tool_manager) {
+                const auxIndex = series.findIndex((entry) => entry.name === 'temperature_sensor aux_tool-temperature')
+                if (auxIndex >= 0) series.splice(auxIndex, 1)
+            }
             commit('setInitSeries', series)
 
             const updateSourceInterval = setInterval(() => {
@@ -266,6 +278,9 @@ export const actions: ActionTree<PrinterTempHistoryState, RootState> = {
                 date: now,
             }
 
+            const tool = rootState.printer?.laser_tool_manager
+            if (tool) auxHistoryNames.forEach((name) => (data[`${name}-temperature`] = null))
+
             items.forEach((name: string) => {
                 if (!(rootState.printer && name in rootState.printer)) return
                 const printerObject = { ...rootState.printer[name] }
@@ -274,11 +289,18 @@ export const actions: ActionTree<PrinterTempHistoryState, RootState> = {
                     if (!(attrKey in printerObject)) return
 
                     let value = printerObject[attrKey]
-                    if (value !== null) value = Math.round(printerObject[attrKey] * 10) / 10
+                    if (!toolSensorValid(tool, name)) value = null
+                    if (value !== null) value = Math.round(value * 10) / 10
                     if (datasetTypesInPercents.includes(attrKey))
                         value = Math.round(printerObject[attrKey] * 1000) / 1000
 
-                    data[`${name}-${attrKey}`] = value
+                    if (tool && name === 'temperature_sensor aux_tool') {
+                        if (['IR_LASER', 'DREMEL'].includes(tool.detected_tool) && attrKey === 'temperature') {
+                            data[`${tool.detected_tool} (aux_tool)-temperature`] = value
+                        }
+                    } else {
+                        data[`${name}-${attrKey}`] = value
+                    }
                 })
             })
 

@@ -17,6 +17,7 @@ import {
 } from '@/store/printer/types'
 import { caseInsensitiveSort, formatFrequency, getMacroParams } from '@/plugins/helpers'
 import { RootState } from '@/store/types'
+import { coolingControls, toolControlVisible } from '@/utils/laserTool'
 
 export const getters: GetterTree<PrinterState, RootState> = {
     getPrintPercent: (state, getters, rootState) => {
@@ -189,7 +190,15 @@ export const getters: GetterTree<PrinterState, RootState> = {
 
     getFans: (state, getters) => {
         const fans: PrinterStateFan[] = []
-        const supportedFans = ['temperature_fan', 'extended_temperature_fan', 'controller_fan', 'heater_fan', 'linux_fan', 'fan_generic', 'fan']
+        const supportedFans = [
+            'temperature_fan',
+            'extended_temperature_fan',
+            'controller_fan',
+            'heater_fan',
+            'linux_fan',
+            'fan_generic',
+            'fan',
+        ]
         const objects = getters.getPrinterObjects(supportedFans)
 
         const controllableFans = ['fan_generic', 'fan']
@@ -242,6 +251,8 @@ export const getters: GetterTree<PrinterState, RootState> = {
                     let controllable = controllableFans.includes(nameSplit[0].toLowerCase())
                     const settings = state.configfile?.settings[key.toLowerCase()] ?? {}
                     const power = 'speed' in value ? value.speed : 'value' in value ? value.value : 0
+                    const tool = state.laser_tool_manager
+                    if (!toolControlVisible(tool, name, power)) continue
                     const rpm = 'rpm' in value ? value.rpm : null
                     const current = typeof value.current === 'number' ? value.current : null
                     const currentUnit = typeof value.current_unit === 'string' ? value.current_unit : null
@@ -256,6 +267,16 @@ export const getters: GetterTree<PrinterState, RootState> = {
                         if ('pwm' in settings) pwm = settings?.pwm ?? false
                         if (['pwm_tool', 'pwm_cycle_time'].includes(nameSplit[0])) pwm = true
                         if ('scale' in settings) scale = settings?.scale ?? 1
+                    }
+
+                    if (tool && ['laser', 'aux_tool', 'tool_enable'].includes(name)) {
+                        controllable = controllable && tool.power_granted
+                    }
+                    if (tool && coolingControls.includes(name) && tool.detected_tool !== 'BLUE_LASER') {
+                        controllable = false
+                    }
+                    if (tool?.power_granted && [...coolingControls, 'air_assist', 'Steckdose_4'].includes(name)) {
+                        controllable = false
                     }
 
                     const tmp = {

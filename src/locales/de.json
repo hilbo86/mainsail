@@ -732,6 +732,19 @@
             "Restart": "Neustart",
             "ServiceReports": "{service} meldet"
         },
+        "LaserToolStatus": {
+            "Armed": "Werkzeugleistung für diesen Job freigegeben",
+            "Calibrating": "Kalibrierung aktiv; XY-Bezug erhalten",
+            "CoolingActive": "Main-Kühlkreis läuft (Betrieb, Wartung oder Nachlauf)",
+            "Disarmed": "Werkzeugleistung gesperrt",
+            "HomeZ": "Z nach oben referenzieren",
+            "Invalid": "Kalibrierbezug verloren; neu beginnen",
+            "JobTool": "Benötigtes Jobwerkzeug",
+            "MachineRange": "Maschinenfahrbereich",
+            "Tool": "Erkanntes Werkzeug",
+            "ZHeld": "IR: Z oben referenziert und gehalten",
+            "ZRequired": "IR: Z vor der Leistungsfreigabe nach oben referenzieren"
+        },
         "LedEffectsPanel": {
             "Headline": "LED Effekte",
             "StopAll": "Alle Effekte stoppen"

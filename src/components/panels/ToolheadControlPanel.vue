@@ -84,6 +84,7 @@
             </v-menu>
             <toolhead-panel-settings />
         </template>
+        <laser-tool-status />
         <!-- MOVE TO CONTROL -->
         <move-to-control />
         <!-- AXIS CONTROL -->
@@ -122,6 +123,7 @@ import CircleControl from '@/components/panels/ToolheadControls/CircleControl.vu
 import ControlMixin from '@/components/mixins/control'
 import CrossControl from '@/components/panels/ToolheadControls/CrossControl.vue'
 import MoveToControl from '@/components/panels/ToolheadControls/MoveToControl.vue'
+import LaserToolStatus from '@/components/panels/ToolheadControls/LaserToolStatus.vue'
 import Panel from '@/components/ui/Panel.vue'
 import ToolSlider from '@/components/inputs/ToolSlider.vue'
 import ZoffsetControl from '@/components/panels/ToolheadControls/ZoffsetControl.vue'
@@ -133,6 +135,7 @@ import { mdiDotsVertical, mdiEngineOff, mdiGamepad, mdiSpeedometer, mdiMenuDown,
         CircleControl,
         CrossControl,
         MoveToControl,
+        LaserToolStatus,
         Panel,
         ToolSlider,
         ZoffsetControl,
@@ -147,6 +150,7 @@ export default class ToolheadControlPanel extends Mixins(BaseMixin, ControlMixin
     mdiMenuDown = mdiMenuDown
 
     get controlStyle(): string {
+        if (this.irZLocked) return 'bars'
         return this.$store.state.gui.control.style ?? 'bars'
     }
 
@@ -179,6 +183,7 @@ export default class ToolheadControlPanel extends Mixins(BaseMixin, ControlMixin
     }
 
     get showZOffset(): boolean {
+        if (this.irZLocked) return false
         return this.$store.state.gui.view.toolhead.showZOffset ?? true
     }
 
